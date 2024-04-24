@@ -1,1 +1,1 @@
-# hairdresser
+#### Release branches to prepare new versions of the system for deployment, with final adjustments before merging into the main and development branches.
