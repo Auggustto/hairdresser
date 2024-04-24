@@ -1,1 +1,1 @@
-#### The development branch, where active development of the system occurs, including both the back-end and the front-end.
+#### Feature branches for specific functionalities, created from the development branch, to develop new features of the system.
