@@ -1,4 +1,3 @@
-from datetime import datetime
 import logging
 from flask import jsonify
 
@@ -24,7 +23,8 @@ class SchedulingManager:
             return users, hairdressers, services
         
         except Exception as e:
-            return str(e), 500
+            logging.error(f"Error filter user and hairdressers: {e}")
+            return jsonify({"error": str(e)}), 500
         
 
 
@@ -34,7 +34,7 @@ class SchedulingManager:
         
         except Exception as e:
             logging.error(f"Error filtering user: {e}")
-            raise 
+            return jsonify({"error": str(e)}), 500 
 
 
     def create(self, user_email, hairdressers_email, name_service, date_service, hour_obj):
@@ -53,36 +53,29 @@ class SchedulingManager:
 
             return jsonify({"message": "Service created successfuly."}), 201
 
-        
         except Exception as e:
             logging.error(f"Error filtering user: {e}")
-            raise
+            return jsonify({"error": str(e)}), 500
     
     def read(self, schedulin_id):
         try:
             check_scheduling = self.filter_scheduling(schedulin_id)
 
-
             if check_scheduling:
-
-                # date_obj = datetime.strptime(check_scheduling.date, '%Y-%m-%d')
-                # formatted_date = date_obj.strftime('%d/%m/%Y')
-
                 return {
                     "client": check_scheduling.client_id,
                     "hairdresser": check_scheduling.hairdresser_id,
                     "service":check_scheduling.service_id,
-                    # "date": formatted_date,
                     "date": check_scheduling.date,
                     "time":check_scheduling.time.strftime("%H:%M")
                     }, 200
             
-            return {"error": f"Service {schedulin_id} not found."}, 500
+            return jsonify({"error": f"Service {schedulin_id} not found."}), 500
             
         except Exception as e:
             session.rollback()
             logging.error(f"Error creating user: {e}")
-            return e, 500
+            return jsonify({"error": str(e)}), 500
 
 
     def update(self, scheduling_id, user_email, hairdressers_email, name_service, date_service, hour_obj):
@@ -99,14 +92,14 @@ class SchedulingManager:
 
                 session.commit()
 
-                return {"message": "Service updated successfully!"}, 200
+                return jsonify({"message": "Service updated successfully!"}), 200
             
-            return {"error": f"Service {name_service} not found."}, 500
+            return jsonify({"error": f"Service {name_service} not found."}), 500
         
         except Exception as e:
             session.rollback()
             logging.error(f"Error updating user: {e}")
-            return str(e), 500
+            return jsonify({"error": str(e)}), 500
 
 
     def delete(self, scheduling_id):
@@ -117,12 +110,12 @@ class SchedulingManager:
                 session.delete(check_scheduling)
                 session.commit()
 
-                return {"message": f"Service {scheduling_id} deleted successfully!"}, 200
+                return jsonify({"message": f"Service {scheduling_id} deleted successfully!"}), 200
             
-            return {"error": f"Service: {scheduling_id} not found!"}, 404
+            return jsonify({"error": f"Service: {scheduling_id} not found!"}), 404
         
         except Exception as e:
             session.rollback()
             logging.error(f"Error deleting user: {e}")
-            return str(e), 500
+            return jsonify({"error": str(e)}), 500
 

@@ -14,7 +14,6 @@ class SchedulingController:
         date_service = request.json.get("date_service")
         hour = request.json.get("hour")
 
-
         return user_email, hairdressers_email, name_service, date_service, hour
             
     
@@ -28,16 +27,15 @@ class SchedulingController:
                 date_obj = datetime.strptime(date_service, '%d/%m/%Y')
                 hour_obj = datetime.strptime(hour, '%H:%M').time()
 
-                print(hour_obj)
-
                 new_schedulin = SchedulingManager()
                 return new_schedulin.create(user_email, hairdressers_email, name_service, date_obj, hour_obj)
             
             except Exception as e:
-                return {"error": str(e)}, 500
+                logging.error(f"Error crate scheduling: {e}")
+                return jsonify({"error": str(e)}), 500
                 
 
-    def read(self, schedulin_id):
+    def read_scheduling(self, schedulin_id):
         if not all([schedulin_id]):
             return jsonify({"error": "Field schedulin_id id are required"}), 400
         try:
@@ -45,10 +43,11 @@ class SchedulingController:
             return service.read(schedulin_id)
         
         except Exception as e:
-            return jsonify({"error": str(e)})
+            logging.error(f"Error read: {e}")
+            return jsonify({"error": str(e)}), 500
         
     
-    def update(self, scheduling_id):
+    def update_scheduling(self, scheduling_id):
         try:
             user_email, hairdressers_email, name_service, date_service, hour = self.get_metadata()
 
@@ -62,13 +61,15 @@ class SchedulingController:
                 return service.update(scheduling_id, user_email, hairdressers_email, name_service, date_obj, hour_obj)
         
         except Exception as e:
-            return jsonify({"error": str(e)})
+            logging.error(f"Error update scheduling: {e}")
+            return jsonify({"error": str(e)}), 500
         
-    
-    def delete(self, check_scheduling):
+
+    def delete_scheduling(self, check_scheduling):
         try:
             scheduling = SchedulingManager()
             return scheduling.delete(check_scheduling)
             
         except Exception as e:
-            return jsonify({"error": str(e)})
+            logging.error(f"Error delete scheduling: {e}")
+            return jsonify({"error": str(e)}), 500
