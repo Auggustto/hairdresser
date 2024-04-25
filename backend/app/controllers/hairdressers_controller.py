@@ -2,7 +2,7 @@ from flask import jsonify, request
 from datetime import datetime
 import random
 
-from app.models.hairdressers.hairdressers_models import HairdressersManager
+from app.models.hairdressers_models import HairdressersManager
 from app.services.email_hairdressers import send_email
 
 

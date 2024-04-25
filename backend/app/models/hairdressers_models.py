@@ -7,11 +7,9 @@ from flask_jwt_extended import create_access_token
 
 from app.services.hash import hash
 from app.models.database.db import session, Hairdressers
-from app.models.login.login_models import LoginManager
 
 
 class HairdressersManager:
-
 
     def hash_password(self, password):
         return hash(password)

@@ -3,7 +3,7 @@ import random
 import datetime
 import uuid
 
-from app.models.login.login_models import LoginManager
+from app.models.login_models import LoginManager
 from app.services.email import send_email
 
 

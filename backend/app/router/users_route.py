@@ -1,7 +1,7 @@
 from flask_jwt_extended import jwt_required
 
 from app import app
-from app.controllers.users.user_controller import UserController
+from app.controllers.user_controller import UserController
 
 
 @app.route('/users/register', methods=["POST"])

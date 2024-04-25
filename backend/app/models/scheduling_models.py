@@ -3,7 +3,7 @@ from flask import jsonify
 
 from app.models.database.db import Scheduling, session
 from app.models.users_models import UserManager
-from app.models.hairdressers.hairdressers_models import HairdressersManager
+from app.models.hairdressers_models import HairdressersManager
 from app.models.services_models import ServicerManager
 
 

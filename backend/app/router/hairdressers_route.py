@@ -1,7 +1,7 @@
 from app import app
 from flask_jwt_extended import jwt_required
 
-from app.controllers.hairdressers.hairdressers_controller import HairdressersController
+from app.controllers.hairdressers_controller import HairdressersController
 
 @app.route('/hairdressers/register', methods=["POST"])
 def create_hairdressers():
