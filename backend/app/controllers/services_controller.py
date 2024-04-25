@@ -29,11 +29,11 @@ class ServicesController:
                 return new_service.create(name_service, description, price, duration_obj)
             
             except Exception as e:
-                return {"error": str(e)}, 500
+                logging.error(f"Error creating user: {e}")
+                return jsonify({"error": str(e)}), 500
                 
 
     def read(self, name_service):
-        # print(name_service)
         
         if not all(name_service):
             return jsonify({"error": "Field name_service are required"}), 400
@@ -42,6 +42,7 @@ class ServicesController:
             return service.read(name_service)
         
         except Exception as e:
+            logging.error(f"Error read user: {e}")
             return jsonify({"error": str(e)})
         
     
@@ -58,6 +59,7 @@ class ServicesController:
                 return service.update(name_service, description, price, duration_obj)
         
         except Exception as e:
+            logging.error(f"Error update user: {e}")
             return jsonify({"error": str(e)})
         
     
@@ -67,4 +69,5 @@ class ServicesController:
             return services.delete(name_service)
             
         except Exception as e:
+            logging.error(f"Error delete user: {e}")
             return jsonify({"error": str(e)})

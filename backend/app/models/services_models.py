@@ -1,6 +1,5 @@
 import logging
 from flask import jsonify
-from datetime import datetime
 
 from app.models.database.db import session, Services
 
@@ -12,11 +11,9 @@ class ServicerManager:
     def filter_service(self, service):
         try:
             return session.query(Services).filter_by(name_service=service).first()
-
-        
         except Exception as e:
             logging.error(f"Error filtering user: {e}")
-            raise
+            return jsonify({"error": str(e)})
 
 
     def create(self, name_service, description, price, duration):
@@ -30,12 +27,12 @@ class ServicerManager:
                 session.add(new_service)
                 session.commit()
 
-                return {"message": "Service created successfully!"}, 201
-        
+                return jsonify({"message": "Service created successfully!"}), 201
+            
         except Exception as e:
             session.rollback()
             logging.error(f"Error creating user: {e}")
-            return e, 500
+            return jsonify({"error": str(e)})
     
 
     def read(self, name_service):
@@ -50,12 +47,13 @@ class ServicerManager:
                     "duration":check_service.duration.strftime("%H:%M")
                     }, 200
             
-            return {"error": f"Service {name_service} not found."}, 500
+            return jsonify({"error": f"Service {name_service} not found."}), 500
             
         except Exception as e:
             session.rollback()
             logging.error(f"Error creating user: {e}")
-            return e, 500
+            return jsonify({"error": str(e)})
+        
 
 
     def update(self, name_service, description, price, duration):
@@ -70,14 +68,14 @@ class ServicerManager:
 
                 session.commit()
 
-                return {"message": "Service updated successfully!"}, 200
+                return jsonify({"message": "Service updated successfully!"}), 200
             
-            return {"error": f"Service {name_service} not found."}, 500
+            return jsonify({"error": f"Service {name_service} not found."}), 500
         
         except Exception as e:
             session.rollback()
             logging.error(f"Error updating user: {e}")
-            return str(e), 500
+            return jsonify({"error": str(e)})
 
 
     def delete(self, name_service):
@@ -88,11 +86,11 @@ class ServicerManager:
                 session.delete(check_service)
                 session.commit()
 
-                return {"message": f"User {name_service} deleted successfully!"}, 200
+                return jsonify({"message": f"User {name_service} deleted successfully!"}), 200
             
-            return {"error": f"User: {name_service} not found!"}, 404
+            return jsonify({"error": f"User: {name_service} not found!"}), 404
         
         except Exception as e:
             session.rollback()
             logging.error(f"Error deleting user: {e}")
-            return str(e), 500
+            return jsonify({"error": str(e)})
