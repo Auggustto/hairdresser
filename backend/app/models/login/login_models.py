@@ -4,7 +4,7 @@ import bcrypt
 import logging
 from flask_jwt_extended import create_access_token
 
-from app.models.user.users_models import UserManager
+from app.models.users_models import UserManager
 from app.services.email import send_email
 from app.services.hash import hash
 

@@ -1,6 +1,5 @@
 import logging
 from flask import jsonify
-from datetime import datetime
 
 from app.models.database.db import session, User
 from app.services.hash import hash

@@ -1,7 +1,8 @@
-from flask import jsonify, request
 from datetime import datetime
+from flask import jsonify, request
+import logging
 
-from app.models.user.users_models import UserManager
+from app.models.users_models import UserManager
 from app.services.hash import hash
 from app.services.telephone import format_telephone
 
@@ -33,7 +34,8 @@ class UserController:
                 return new_user.create(name, lastname, format_telephone(telephone), date, email, hash(password))
             
             except Exception as e:
-                return {"error": str(e)}, 500
+                logging.error(f"Error creating user: {e}")
+                return jsonify({"error": str(e)}), 500
                 
 
     def read(self, email):
@@ -45,6 +47,7 @@ class UserController:
             return user.read(email)
         
         except Exception as e:
+            logging.error(f"Error read user: {e}")
             return jsonify({"error": str(e)})
         
     
@@ -59,8 +62,9 @@ class UserController:
 
                 user = UserManager()
                 return user.update(user_email, name, lastname, telephone, birthdata_obj, email, hash(password))
-        
+            
         except Exception as e:
+            logging.error(f"Error update user: {e}")
             return jsonify({"error": str(e)})
         
     
@@ -71,4 +75,5 @@ class UserController:
             return user.delete(email)
             
         except Exception as e:
+            logging.error(f"Error delete user: {e}")
             return jsonify({"error": str(e)})
